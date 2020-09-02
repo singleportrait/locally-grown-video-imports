@@ -135,12 +135,13 @@ async function uploadToContentful(videos) {
   const client = contentful.createClient({
     accessToken: process.env.CONTENTFUL_MANAGEMENT_API_KEY
   })
-  const space = await client.getSpace('xd3yvnr5vz2q');
+  const space = await client.getSpace('erbmau6qmrq2');
+  const environment = await space.getEnvironment('master');
 
   console.log("Uploading to Contentful...");
 
   for (const video of videos) {
-    await space.createEntry('video', {
+    await environment.createEntry('video', {
       fields: {
         title: {
           'en-US': video.title
@@ -154,7 +155,7 @@ async function uploadToContentful(videos) {
       }
     })
     .then((entry) => entry.publish())
-    .then((entry) => console.log(`Entry ${entry.sys.id} (${entry.fields.title['en-US']}) published.`))
+    .then((entry) => console.log(`Entry ${entry.sys.id} (${entry.fields.title['en-US']}) created & published.`))
     // .then((entry) => console.log(entry))
     .catch(console.error)
   };
